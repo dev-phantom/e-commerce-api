@@ -1,5 +1,7 @@
 const Product = require("../models/Product");
 const Cart = require("../models/Cart");
+const cloud = require("../config/cloud");
+const cloudinary = require("cloudinary");
 
 // @Des: Get all product
 // @Method: GET
@@ -32,17 +34,25 @@ module.exports.addProduct = async (req, res, next) => {
   try {
     if (!req.body) return res.status(400).send("Field are required!");
 
-    await Product.create({
-      product_name: req.body.product_name,
-      product_image: req.file.filename,
-      product_des: req.body.product_des,
-      product_price: req.body.product_price,
-      product_cat: req.body.product_cat,
-    })
-      .then((data) =>
-        res.status(201).send(data)
-      )
-      .catch((error) => console.log(error));
+    const  { product_name,product_des,product_price,product_cat } = req.body;
+
+    // upload image to cloudinary
+    await cloudinary.v2.uploader.upload(req.file.path)
+      .then(async (result) => {
+        await Product.create({
+          product_name,
+          product_image: result.secure_url,
+          product_des,
+          product_price,
+          product_cat,
+      })
+        .then((data) =>
+          res.status(201).send(data)
+        )
+        .catch((error) => console.log(error));
+      })
+    .catch(error => console.log(error))
+    
   } catch (error) {
     next(error);
   }
