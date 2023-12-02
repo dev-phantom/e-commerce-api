@@ -39,7 +39,7 @@ module.exports.addProduct = async (req, res, next) => {
   try {
     if (!req.body) return res.status(400).send("Field are required!");
 
-    const  { product_name,product_des,product_price,product_cat } = req.body;
+    const  { product_name,product_des,product_price,product_cat,product_rate } = req.body;
 
     // upload image to cloudinary
     await cloudinary.v2.uploader.upload(req.file.path)
@@ -50,6 +50,7 @@ module.exports.addProduct = async (req, res, next) => {
           product_des,
           product_price,
           product_cat,
+          product_rate
       })
         .then((data) =>
           res.status(201).send(data)
