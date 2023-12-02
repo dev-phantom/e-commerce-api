@@ -1,7 +1,7 @@
 const Product = require("../models/Product");
 const Cart = require("../models/Cart");
 const cloud = require("../config/cloud");
-const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary").v2;
 
 // @Des: Get all product
 // @Method: GET
@@ -42,22 +42,19 @@ module.exports.addProduct = async (req, res, next) => {
     const  { product_name,product_des,product_price,product_cat,product_rate } = req.body;
 
     // upload image to cloudinary
-    await cloudinary.v2.uploader.upload(req.file.path)
-      .then(async (result) => {
+    const result = await cloudinary.uploader.upload(req.file.path)
         await Product.create({
-          product_name,
-          product_image: result.secure_url,
-          product_des,
-          product_price,
-          product_cat,
-          product_rate
-      })
+            product_name,
+            product_image: result.secure_url,
+            product_des,
+            product_price,
+            product_cat,
+            product_rate
+        })
         .then((data) =>
           res.status(201).send(data)
         )
-        .catch((error) => console.log(error));
-      })
-    .catch(error => console.log(error))
+        .catch((error) => console.log("1",error));
     
   } catch (error) {
     next(error);
