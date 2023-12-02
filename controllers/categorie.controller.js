@@ -36,6 +36,16 @@ module.exports.removeCategorie = async (req, res, next) => {
   }
 };
 
+module.exports.getByQuery = async (req,res,next) => {
+    try{
+      const { q } = req.query;
+      const products = await Categorie.find({ product_cat: q });
+      return res.status(200).send(products);
+    } catch(error) {
+      next(error);
+    }
+}
+
 // @Des: Get all categories
 // @Method: GET
 // @Access: Public

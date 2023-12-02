@@ -22,6 +22,10 @@ const ProductSchema = new Schema(
       type: String,
       required: true,
     },
+    product_rate: {
+      type: Number,
+      required: true,
+    },
     product_total: {
       type: Number,
       default: 1,
