@@ -2,8 +2,7 @@ const { Router } = require("express");
 const {
   addCategorie,
   getCategorie,
-  removeCategorie,
-  getByQuery
+  removeCategorie
 } = require("../controllers/categorie.controller");
 
 const CategorieRouter = Router();
@@ -13,9 +12,6 @@ CategorieRouter.post("/add", addCategorie);
 
 // get all categories
 CategorieRouter.get("/get", getCategorie);
-
-//fetch product by category
-CategorieRouter.get("/q", getByQuery);
 
 // delete categorie
 CategorieRouter.delete("/delete", removeCategorie);

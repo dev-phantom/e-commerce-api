@@ -4,7 +4,7 @@ const {
   addProduct,
   getSingleProduct,
   removeProduct,
-  updateProduct,
+  updateProduct
 } = require("../controllers/product.controller");
 const { upload } = require("../middleware/uploads");
 
