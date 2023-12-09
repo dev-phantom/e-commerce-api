@@ -57,6 +57,7 @@ module.exports.addProduct = async (req, res, next) => {
         .catch((error) => console.log("1",error));
     
   } catch (error) {
+  console.log(JSON.stringify(error,null,2));
     next(error);
   }
 };

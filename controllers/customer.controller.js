@@ -6,9 +6,9 @@ const bcrypt = require("bcrypt");
 // @Method: POST
 module.exports.createAccount = async (req, res, next) => {
   try {
-    const { first_name, last_name, email, password } = req.body;
+    const { first_name, last_name,phone_number, email, password } = req.body;
 
-    if (!first_name || !last_name || !email || !password) {
+    if (!first_name || !last_name || !email || !phone_number || !password) {
       return res.status(400).send("Credentials are required!");
     }
 
@@ -23,6 +23,7 @@ module.exports.createAccount = async (req, res, next) => {
     await Customer.create({
       first_name,
       last_name,
+      phone_number,
       email,
       password: hashPassword,
     })

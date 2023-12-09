@@ -18,6 +18,10 @@ const CustomerSchema = new Schema(
       type: String,
       required: true,
     },
+    phone_number: {
+      type: String,
+      required: true,
+    },
     role: {
       type: Number,
       default: 2001,
