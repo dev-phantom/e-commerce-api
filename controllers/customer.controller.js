@@ -15,7 +15,7 @@ module.exports.createAccount = async (req, res, next) => {
     // first check if email does not exit
     const check = await Customer.findOne({ email });
     if (check)
-      return res.status(409).send("Account with this email has already exit");
+      return res.status(401).send("Account with this email has already exit");
 
     // hashed password
     const hashPassword = await bcrypt.hash(password, 13);
