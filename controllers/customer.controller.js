@@ -28,7 +28,7 @@ module.exports.createAccount = async (req, res, next) => {
       password: hashPassword,
     })
       .then((data) => res.status(201).send("Account created"))
-      .catch((error) => console.log(error));
+      .catch((error) => res.status(400).send(error));
   } catch (error) {
     next(error);
   }
@@ -71,6 +71,18 @@ module.exports.getAllCustomers = async (req,res,next) => {
 
     const customers = await Customer.find();
     return res.status(200).send(customers);
+
+  } catch(error){
+    next(error);
+  }
+}
+
+// get single customer/user
+module.exports.getSingleCustomer = async (req,res,next) => {
+  try{
+
+    const customer = await Customer.find();
+    return res.status(200).send(customer);
 
   } catch(error){
     next(error);

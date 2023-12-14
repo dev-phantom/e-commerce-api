@@ -4,7 +4,8 @@ const {
   loginUser,
   getAllCustomers,
   updateProfile,
-  getMyProfile
+  getMyProfile,
+  getSingleCustomer
 } = require("../controllers/customer.controller");
 
 const CustomerRouter = Router();
@@ -21,6 +22,9 @@ CustomerRouter.post("/login", loginUser);
 
 // get All users
 CustomerRouter.get("/customers",getAllCustomers);
+
+// get single user
+CustomerRouter.get("/customers/:id",getSingleCustomer);
 
 // update profile
 CustomerRouter.put("/update/profile", updateProfile);
