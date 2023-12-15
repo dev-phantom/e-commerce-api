@@ -11,7 +11,7 @@ const CategorieRouter = require("./routes/categorie.route");
 
 const app = express();
 
-// connect DB
+// connect to DB
 require("./config/db");
 
 // middlewares
