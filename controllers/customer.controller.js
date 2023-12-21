@@ -27,7 +27,7 @@ module.exports.createAccount = async (req, res, next) => {
       email,
       password: hashPassword,
     })
-      .then((data) => res.status(201).send("Account created"))
+      .then((data) => res.status(201).send(data))
       .catch((error) => res.status(400).send(error));
   } catch (error) {
     next(error);
