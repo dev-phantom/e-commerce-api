@@ -25,8 +25,9 @@ module.exports.getAllProduct = async (req, res, next) => {
 // @Access: Public
 module.exports.getSingleProduct = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
-    return res.status(200).send(product);
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    return res.status(200).send({ product });
   } catch (error) {
     next(error);
   }
@@ -37,7 +38,7 @@ module.exports.getSingleProduct = async (req, res, next) => {
 // @Access: Private
 module.exports.addProduct = async (req, res, next) => {
   try {
-    if (!req.body) return res.status(400).send("Field are required!");
+    if (!req.body) return res.status(400).send({ message: "Field are required!" });
 
     const  { product_name,product_des,product_price,product_cat,product_rate } = req.body;
 
@@ -52,12 +53,11 @@ module.exports.addProduct = async (req, res, next) => {
             product_rate
         })
         .then((data) =>
-          res.status(201).send(data)
+          res.status(201).send({ data })
         )
         .catch((error) => console.log("1",error));
     
   } catch (error) {
-  console.log(JSON.stringify(error,null,2));
     next(error);
   }
 };
@@ -71,9 +71,9 @@ module.exports.removeProduct = async (req, res, next) => {
     await Cart.find({ product_id: req.body.id}).deleteMany();
     // find the product by ID and delete
     await Product.findByIdAndDelete(req.body.id)
-      .then((data) => res.status(200).send(data._id))
+      .then((data) => res.status(200).send({ product: data._id }))
       .catch((error) =>
-        res.status(400).send("An error occured please try again later")
+        res.status(400).send({ message: "An error occured please try again later" })
       );
   } catch (error) {
     next(error);
@@ -86,8 +86,8 @@ module.exports.removeProduct = async (req, res, next) => {
 module.exports.updateProduct = async (req, res, next) => {
   try {
     await Product.findByIdAndUpdate(req.body.id, req.body, { new: true })
-      .then((data) => res.status(200).send(data))
-      .catch((error) => console.log(error));
+      .then((data) => res.status(200).send({ data }))
+      .catch((error) => res.status(400).send({ error }));
   } catch (error) {
     next(error);
   }

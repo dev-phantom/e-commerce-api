@@ -9,13 +9,13 @@ module.exports.createAccount = async (req, res, next) => {
     const { first_name, last_name,phone_number, email, password } = req.body;
 
     if (!first_name || !last_name || !email || !phone_number || !password) {
-      return res.status(400).send("Credentials are required!");
+      return res.status(400).send({ message: "Credentials are required!" });
     }
 
     // first check if email does not exit
     const check = await Customer.findOne({ email });
     if (check)
-      return res.status(401).send("Account with this email has already exit");
+      return res.status(401).send({ message: "Account with this email has already exit" });
 
     // hashed password
     const hashPassword = await bcrypt.hash(password, 13);
@@ -27,8 +27,8 @@ module.exports.createAccount = async (req, res, next) => {
       email,
       password: hashPassword,
     })
-      .then((data) => res.status(201).send(data))
-      .catch((error) => res.status(400).send(error));
+      .then((data) => res.status(201).send({ data }))
+      .catch((error) => res.status(400).send({ error }));
   } catch (error) {
     next(error);
   }
@@ -45,7 +45,7 @@ module.exports.loginUser = async (req, res, next) => {
     const { email, password: pass } = req.body;
 
     if (!email || !pass)
-      return res.status(400).send("Email or Password is required");
+      return res.status(400).send({ message: "Email or Password is required" });
 
     // check if user exit
     const userCheck = await Customer.findOne({ email });
@@ -53,12 +53,12 @@ module.exports.loginUser = async (req, res, next) => {
       const verifyPassword = await bcrypt.compare(pass, userCheck.password);
       if (verifyPassword) {
         const { password, createdAt, updatedAt, ...others } = userCheck._doc;
-        return res.status(200).send(others);
+        return res.status(200).send({ user: others });
       } else {
-        return res.status(401).send("Invalid Email or password is invalid");
+        return res.status(401).send({ message: "Invalid Email or password is invalid" });
       }
     } else {
-      return res.status(401).send("Invalid Email or password is invalid");
+      return res.status(401).send({ message: "Invalid Email or password is invalid" });
     }
   } catch (error) {
     next(error);
@@ -70,7 +70,7 @@ module.exports.getAllCustomers = async (req,res,next) => {
   try{
 
     const customers = await Customer.find();
-    return res.status(200).send(customers);
+    return res.status(200).send({ customers });
 
   } catch(error){
     next(error);
@@ -82,7 +82,7 @@ module.exports.getSingleCustomer = async (req,res,next) => {
   try{
 
     const customer = await Customer.find();
-    return res.status(200).send(customer);
+    return res.status(200).send({ customer });
 
   } catch(error){
     next(error);
@@ -92,8 +92,8 @@ module.exports.getSingleCustomer = async (req,res,next) => {
 // update profile
 module.exports.updateProfile = async (req,res,next) => {
   try{
-
-    const customer = await Customer.findById(req.body.id);
+    const { id } = req.params;
+    const customer = await Customer.findById(id);
 
     if(customer){
 
@@ -106,11 +106,11 @@ module.exports.updateProfile = async (req,res,next) => {
         const { password, createdAt, updatedAt, ...others } = customer._doc;
         return res.status(200).send(others)
       } else {
-        return res.status(400).send("An error occured please try again later");
+        return res.status(400).send({ message: "An error occured please try again later" });
       }
 
     } else {
-      return res.status(404).send("Customer not found!");
+      return res.status(404).send({ message: "Customer not found!" });
     }
 
   } catch(error){

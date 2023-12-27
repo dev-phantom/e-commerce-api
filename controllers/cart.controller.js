@@ -9,7 +9,7 @@ module.exports.addToCart = async (req, res, next) => {
     const { product_id, customer_id } = req.body;
 
     if (!product_id || !customer_id)
-      return res.status(400).send("Cusotmer or product ID is required");
+      return res.status(400).send({ message: "Cusotmer or product ID is required" });
     
       // save to cart
       await Cart.create({
@@ -20,9 +20,9 @@ module.exports.addToCart = async (req, res, next) => {
           const result = await data.populate("product_id");
           return res
             .status(200)
-            .send(result);
+            .send({ product: result });
         })
-        .catch((error) => console.log(error));
+        .catch((error) => res.status(400).send({ error }));
   } catch (error) {
     next(error);
   }
@@ -32,7 +32,7 @@ module.exports.getSingleCart = async (req,res,next) => {
   try{
 
     const cart = await Cart.find({ customer_id: req.params.id }).populate("product_id");
-    return res.status(200).send(cart)
+    return res.status(200).send({ cart })
   } catch(error){
     next(error);
   }
@@ -47,10 +47,10 @@ module.exports.addToQuatity = async (req,res,next) => {
 
       await cart.product_quatity++;
       await cart.save();
-      return res.status(200).send(cart._id);
+      return res.status(200).send({ cart: cart._id });
 
     } else {
-      return res.status(404).send("Cart not found");
+      return res.status(404).send({ message: "Cart not found" });
     }
 
   } catch(error){
@@ -72,14 +72,14 @@ module.exports.minusToQuatity = async (req,res,next) => {
         return res.status(200).send(cart._id);
       } else {
         await Cart.findByIdAndDelete(cart._id).then((data) => {
-          return res.status(200).send(data._id);
+          return res.status(200).send({ cart: data._id });
         }).catch(error => {
-          return res.status(400).send("An error occured please try again later");
+          return res.status(400).send({ message: "An error occured please try again later" });
         })
       }
 
     } else {
-      return res.status(404).send("Cart not found");
+      return res.status(404).send({ message: "Cart not found" });
     }
 
   } catch(error){
