@@ -92,7 +92,7 @@ module.exports.getSingleCustomer = async (req,res,next) => {
 // update profile
 module.exports.updateProfile = async (req,res,next) => {
   try{
-    const { id } = req.params;
+    const { id } = req.body;
     const customer = await Customer.findById(id);
 
     if(customer){

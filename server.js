@@ -11,8 +11,8 @@ const CategorieRouter = require("./routes/categorie.route");
 
 const app = express();
 
-// connect to DB
-require("./config/db");
+// connect to DB 
+const connectDB = require("./config/db");
 
 // middlewares
 app.use(express.static(path.join(__dirname,"public")));
@@ -37,4 +37,9 @@ app.get("*", (req, res) => {
   res.status(404).send("Page not found!");
 });
 
-app.listen(PORT, () => console.log("Server running on port...", PORT));
+connectDB()
+ .then(() => {
+   app.listen(PORT, () => console.log("Server running on port...", PORT));
+ })
+ .catch(error => console.error(error))
+

@@ -24,7 +24,7 @@ module.exports.addCategorie = async (req, res, next) => {
 // @Access: Public
 module.exports.removeCategorie = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
     if (req.body.id) {
       await Categorie.findByIdAndDelete(id)
         .then((data) => res.status(200).send({ data }))
