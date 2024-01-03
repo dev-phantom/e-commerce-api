@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@cyclic.sh/dynamodb": "^0.0.35",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.41.0",
     "cors": "^2.8.5",

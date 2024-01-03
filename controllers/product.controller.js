@@ -43,7 +43,7 @@ module.exports.addProduct = async (req, res, next) => {
     const  { product_name,product_des,product_price,product_cat,product_rate } = req.body;
 
     // upload image to cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path)
+    const result = await cloudinary.uploader.upload(req.body.product_image)
         await Product.create({
             product_name,
             product_image: result.secure_url,

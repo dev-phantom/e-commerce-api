@@ -6,7 +6,7 @@ const {
   removeProduct,
   updateProduct
 } = require("../controllers/product.controller");
-const { upload } = require("../middleware/uploads");
+// const { upload } = require("../middleware/uploads");
 
 const productRouter = Router();
 
@@ -17,7 +17,7 @@ productRouter.get("/", getAllProduct);
 productRouter.get("/get/:id", getSingleProduct);
 
 // Add product
-productRouter.post("/add", upload.single("product_image"), addProduct);
+productRouter.post("/add", addProduct);
 
 // remove product
 productRouter.delete("/remove", removeProduct);
