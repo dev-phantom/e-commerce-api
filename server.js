@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const PORT = process.env.PORT || 3000;
 const helmet = require("helmet");
-const path = require("path");
 const cors = require("cors");
 const CustomerRouter = require("./routes/customer.route");
 const productRouter = require("./routes/product.router");
@@ -15,7 +14,7 @@ const app = express();
 const connectDB = require("./config/db");
 
 // middlewares
-app.use(express.static(path.join(__dirname,"public")));
+// app.use(express.static(path.join(__dirname,"public")));
 app.use(helmet());
 app.use(
   cors({
