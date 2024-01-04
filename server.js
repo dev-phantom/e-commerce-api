@@ -9,8 +9,16 @@ const CartRouter = require("./routes/cart.route");
 const CategorieRouter = require("./routes/categorie.route");
 const PriceListRouter = require("./routes/pricelist.route");
 const CheckOutRouter = require("./routes/checkout.route");
+const { rateLimit } = require("express-rate-limit")
 
 const app = express();
+
+const limiter = rateLimit({
+	windowMs: 4 * 60 * 1000,
+	limit: 40,
+	standardHeaders: 'draft-7',
+	legacyHeaders: false,
+})
 
 // connect to DB 
 const connectDB = require("./config/db");
@@ -25,7 +33,7 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(limiter)
 // routes
 
 app.use("/", CustomerRouter);
