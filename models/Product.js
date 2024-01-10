@@ -24,6 +24,9 @@ const ProductSchema = new Schema(
       type: String,
       required: true,
     },
+    alt_image:{
+      type: Array,
+    },
     product_rate: {
       type: Number,
       required: true,

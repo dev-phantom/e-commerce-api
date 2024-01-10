@@ -14,9 +14,9 @@ const { rateLimit } = require("express-rate-limit")
 const app = express();
 
 const limiter = rateLimit({
-	windowMs: 4 * 60 * 1000,
-	limit: 40,
-	standardHeaders: 'draft-7',
+	windowMs: 15 * 60 * 1000, 
+	max: 100,
+	standardHeaders: true,
 	legacyHeaders: false,
 })
 
@@ -33,7 +33,7 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(limiter)
+//app.use(limiter)
 // routes
 
 app.use("/", CustomerRouter);

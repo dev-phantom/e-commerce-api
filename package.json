@@ -21,5 +21,8 @@
   "main": "server.js",
   "author": "Khalid Zikirullah",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
 }
