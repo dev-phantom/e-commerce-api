@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { addToCart,getSingleCart,addToQuatity,minusToQuatity } = require("../controllers/cart.controller");
+const { addToCart,getSingleCart,deleteFromCart,addToQuatity,minusToQuatity } = require("../controllers/cart.controller");
 
 const CartRouter = Router();
 
@@ -15,5 +15,8 @@ CartRouter.put("/inc", addToQuatity);
 
 // cart dec
 CartRouter.put("/dec", minusToQuatity);
+
+// delete 
+CartRouter.delete("/delete", deleteFromCart);
 
 module.exports = CartRouter;

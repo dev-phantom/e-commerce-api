@@ -86,3 +86,28 @@ module.exports.minusToQuatity = async (req,res,next) => {
     next(error);
   }
 }
+
+
+
+// delete cart
+module.exports.deleteFromCart = async (req,res,next) => {
+  try{
+    const cart = await Cart.findById(req.body.id)
+
+    if(cart){
+       
+       await Cart.findByIdAndDelete(cart._id).then((data) => {
+          return res.status(200).send({ cart: data._id });
+        }).catch(error => {
+          return res.status(400).send({ message: "An error occured please try again later" });
+        })
+    
+    
+    } else {
+      return res.status(404).send({ message: "Cart not found" });
+    }
+
+  } catch(error){
+    next(error);
+  }
+}
