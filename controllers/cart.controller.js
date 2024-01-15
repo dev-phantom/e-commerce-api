@@ -47,6 +47,7 @@ module.exports.addToQuatity = async (req,res,next) => {
 
       cart.product_quatity += 1;
       await cart.save();
+      console.log(cart);
       return res.status(200).send({ cart: cart._id });
 
     } else {
