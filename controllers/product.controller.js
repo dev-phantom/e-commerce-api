@@ -39,11 +39,7 @@ module.exports.getSingleProduct = async (req, res, next) => {
 module.exports.addProduct = async (req, res, next) => {
   try {
   
-<<<<<<< HEAD
-    const { product_name,product_des,product_price,product_cat,product_rate,product_image,product_total,alt_image } = req.body;
-=======
     const {alt_image, product_total,product_name,product_des,product_price,product_cat,product_rate,product_image } = req.body;
->>>>>>> 14c17e34304e1b66620dec10238f95123aab4362
   
     if (!product_name || !product_des || !product_price || !product_cat || !product_rate) return res.status(400).send({ message: "Field are required!" });
 
