@@ -45,7 +45,7 @@ module.exports.addToQuatity = async (req,res,next) => {
 
     if(cart){
 
-      await Cart.findOneAndUpdate({ _id: cart._id },{ $set: { product_quatity: +product_quatity + 1 }},{ new: true })
+      await cart.product_quatity += 1;
       return res.status(200).send({ cart: cart._id });
 
     } else {
@@ -66,7 +66,8 @@ module.exports.minusToQuatity = async (req,res,next) => {
     if(cart){
 
       if(cart.product_quatity !== 1){
-        await Cart.findOneAndUpdate({ _id: cart._id },{ $set: { product_quatity: +product_quatity - 1 }},{ new: true })
+        //await Cart.findOneAndUpdate({ _id: cart._id },{ $set: { product_quatity: +product_quatity - 1 }},{ new: true })
+        await cart.product_quatity -= 1;
         return res.status(200).send(cart._id);
       } else {
         await Cart.findByIdAndDelete(cart._id).then((data) => {
