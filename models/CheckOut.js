@@ -10,6 +10,8 @@ const CheckOutSchema = new mongoose.Schema({
 	additional_phone_number: { type: String,trim: true },
 	products: { type: Array },
 	status: { type: String,default: "pending...." },
+	directions: { type: String,trim: true },
+	address: { type: String,trim: true },
 	orderID: { type: String,trim: true },
 },{ timestamps: true });
 
