@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const CheckOutSchema = new mongoose.Schema({
+	customer_id: { type: String },
 	first_name: { type: String,trim: true },
 	last_name: { type: String,trim: true },
 	email: { type: String,trim: true },
