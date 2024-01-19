@@ -2,7 +2,7 @@ const CheckOut = require("../models/CheckOut");
 const PriceList = require("../models/PriceList");
 
 async function returnPrice(req,res,next){
-	const { first_name,address, last_name, email, phone_number, state, city, additional_phone_number,directions } = req.body;
+	const { first_name,address, last_name, email, phone_number, state, city, additional_phone_number,directions,products } = req.body;
 
 	if(!first_name || !address || !directions || !last_name || !email || !phone_number || !state || !city || !additional_phone_number){
 		return res.status(422).send({ message: "All fields are required!" });
