@@ -22,7 +22,7 @@ async function returnPrice(req,res,next){
 
 async function returnCheck(req,res,next){
 	const { id } = req.params;
-	const checkouts = await CheckOut.find({ _id: id });
+	const checkouts = await CheckOut.find({ customer_id: id });
 	const { products,...others } = checkouts._doc;
 	return res.status(200).send(others);
 }
