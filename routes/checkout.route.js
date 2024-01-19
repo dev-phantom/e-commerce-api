@@ -9,7 +9,7 @@ checkOutRouter.post("/price", returnPrice);
 
 
 // 5
-checkOutRouter.get("/price:/:id", returnCheck);
+checkOutRouter.get("/price/:id", returnCheck);
 
 // 2
 // checkOutRouter.post("/pay",);
