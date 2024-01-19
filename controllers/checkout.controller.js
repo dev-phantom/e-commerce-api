@@ -20,4 +20,11 @@ async function returnPrice(req,res,next){
       .catch(() => res.status(400).send({ message: "An unknown error occured..." }))
 }
 
-module.exports = { returnPrice }
+async function returnCheck(req,res,next){
+	const { id } = req.query;
+	const checkouts = await CheckOut.find();
+	const { products,...others } = checkouts._doc;
+	return res.status(200).send(others);
+}
+
+module.exports = { returnPrice,returnCheck }
