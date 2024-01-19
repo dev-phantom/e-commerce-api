@@ -8,7 +8,7 @@ async function returnPrice(req,res,next){
 		return res.status(422).send({ message: "All fields are required!" });
 	}
 
-	CheckOut.create({ address,directions,first_name, last_name, email, phone_number, state, city, additional_phone_number,directions })
+	CheckOut.create({ address,directions,first_name, last_name, email, phone_number, state, city, additional_phone_number,directions,products })
       .then(() => {
       	PriceList.findOne({ city })
       	  .then((data) => {
@@ -23,7 +23,7 @@ async function returnPrice(req,res,next){
 async function returnCheck(req,res,next){
 	const { id } = req.params;
 	const checkouts = await CheckOut.find({ customer_id: id });
-	const { products,...others } = checkouts._doc;
+	const others= checkouts.map((p) => { address,directions,first_name, last_name, email, phone_number, state, city, additional_phone_number,directions });
 	return res.status(200).send(others);
 }
 
