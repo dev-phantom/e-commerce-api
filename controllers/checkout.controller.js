@@ -36,7 +36,7 @@ async function returnCheck(req,res,next){
 		//directions: p.directions 
 	//}));
 	let sum = 0;
-	checkouts.products.forEach((val) => sum += val.product_price));
+	checkouts.products.forEach((val) => sum += val.product_price);
 	return res.status(200).send({ checkouts, total: sum });
 }
 
