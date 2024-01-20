@@ -35,7 +35,9 @@ async function returnCheck(req,res,next){
 		//additional_phone_number: p.additional_phone_number,
 		//directions: p.directions 
 	//}));
-	return res.status(200).send(checkouts);
+	let sum = 0;
+	checkouts.products.forEach((val) => sum += val.product_price));
+	return res.status(200).send({ checkouts, total: sum });
 }
 
 module.exports = { returnPrice,returnCheck }
