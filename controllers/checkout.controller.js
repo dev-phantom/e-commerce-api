@@ -22,7 +22,7 @@ async function returnPrice(req,res,next){
 
 async function returnCheck(req,res,next){
 	const { id } = req.params;
-	const checkouts = await CheckOut.findOne({ customer_id: id });
+	const checkouts = await CheckOut.find();
 	console.log(checkouts);
 	//const others = checkouts.map((p) => ({ 
 		//address: p.address,
