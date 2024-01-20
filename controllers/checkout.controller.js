@@ -22,20 +22,20 @@ async function returnPrice(req,res,next){
 
 async function returnCheck(req,res,next){
 	const { id } = req.params;
-	const checkouts = await CheckOut.find({ customer_id: id });
+	const checkouts = await CheckOut.findOne({ customer_id: id });
 	console.log(checkouts);
-	const others = checkouts.map((p) => ({ 
-		address: p.address,
-		first_name: p.first_name, 
-		last_name: p.last_name, 
-		email: p.email, 
-		phone_number: p.phone_number, 
-		state: p.state, 
-		city: p.city, 
-		additional_phone_number: p.additional_phone_number,
-		directions: p.directions 
-	}));
-	return res.status(200).send(others);
+	//const others = checkouts.map((p) => ({ 
+		//address: p.address,
+		//first_name: p.first_name, 
+		//last_name: p.last_name, 
+		//email: p.email, 
+		//phone_number: p.phone_number, 
+		//state: p.state, 
+		//city: p.city, 
+		//additional_phone_number: p.additional_phone_number,
+		//directions: p.directions 
+	//}));
+	return res.status(200).send(checkouts);
 }
 
 module.exports = { returnPrice,returnCheck }
