@@ -2,13 +2,13 @@ const CheckOut = require("../models/CheckOut");
 const PriceList = require("../models/PriceList");
 
 async function returnPrice(req,res,next){
-	const { first_name,address, last_name, email, phone_number, state, city, additional_phone_number,directions,products } = req.body;
+	const { first_name,address, last_name, email, customer_id,phone_number, state, city, additional_phone_number,directions,products } = req.body;
 
-	if(!first_name || !address || !directions || !last_name || !email || !phone_number || !state || !city || !additional_phone_number){
+	if(!first_name || !address || !directions || !last_name || !customer_id || !email || !phone_number || !state || !city || !additional_phone_number){
 		return res.status(422).send({ message: "All fields are required!" });
 	}
 
-	CheckOut.create({ address,directions,first_name, last_name, email, phone_number, state, city, additional_phone_number,products })
+	CheckOut.create({ customer_id,address,directions,first_name, last_name, email, phone_number, state, city, additional_phone_number,products })
       .then(() => {
       	PriceList.findOne({ city })
       	  .then((data) => {
@@ -22,7 +22,7 @@ async function returnPrice(req,res,next){
 
 async function returnCheck(req,res,next){
 	const { id } = req.params;
-	const checkouts = await CheckOut.find();
+	const checkouts = await CheckOut.find({ customer_id: id );
 	console.log(checkouts);
 	//const others = checkouts.map((p) => ({ 
 		//address: p.address,
