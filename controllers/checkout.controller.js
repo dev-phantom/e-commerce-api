@@ -42,4 +42,20 @@ async function returnCheck(req,res,next){
 	return res.status(200).send({ checkouts, total: sum });
 }
 
-module.exports = { returnPrice,returnCheck }
+async function addCheckoutID(req,res,next){
+	try{
+		const { order,id } = req.body;
+        const checkout = await CheckOut.findById(order);
+        if(checkout){
+        	checkout.orderID = id;
+        	await checkout.save();
+        	return res.status(200).send({ checkout });
+        } else {
+        	return res.status(404).send({ message: "Order not found!" });
+        }
+	} catch(e){
+		next(e);
+	}
+}
+
+module.exports = { returnPrice,returnCheck, addCheckoutID }
