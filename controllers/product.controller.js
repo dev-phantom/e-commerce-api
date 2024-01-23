@@ -1,6 +1,6 @@
 const Product = require("../models/Product");
 const Cart = require("../models/Cart");
-const cloud = require("../config/cloud");
+// const cloud = require("../config/cloud");
 //const cloudinary = require("cloudinary").v2;
 
 // @Des: Get all product
@@ -39,20 +39,23 @@ module.exports.getSingleProduct = async (req, res, next) => {
 module.exports.addProduct = async (req, res, next) => {
   try {
   
-    const {alt_image, product_total,product_name,product_des,product_price,product_cat,product_rate,product_image } = req.body;
+    const {alt_image, product_total,product_name, product_brand_name, product_des,product_price,product_cat, product_sub_cat, product_sub_sub_cat, product_rate,product_image } = req.body;
   
-    if (!product_name || !product_des || !product_price || !product_cat || !product_rate) return res.status(400).send({ message: "Field are required!" });
+    if (!product_name || !product_des || !product_price || !product_cat || !product_rate || !product_total) return res.status(400).send({ message: "Field are required!" });
 
 
     // upload image to cloudinary
     //const result = await cloudinary.uploader.upload(req.body.product_image)
         await Product.create({
             product_name,
+            product_brand_name,
             product_image,
             alt_image,
             product_des,
             product_price,
             product_cat,
+            product_sub_cat, 
+            product_sub_sub_cat,
             product_rate,
             product_total
         })

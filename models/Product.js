@@ -7,6 +7,11 @@ const ProductSchema = new Schema(
       required: true,
       trim: true,
     },
+    product_brand_name: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     product_price: {
       type: Number,
       required: true,
@@ -23,6 +28,14 @@ const ProductSchema = new Schema(
     product_cat: {
       type: String,
       required: true,
+    },
+    product_sub_cat: {
+      type: String,
+      required: false,
+    },
+    product_sub_sub_cat: {
+      type: String,
+      required: false,
     },
     alt_image:{
       type: Array,
