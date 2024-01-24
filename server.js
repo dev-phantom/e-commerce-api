@@ -39,7 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", CustomerRouter);
 app.use("/product", productRouter);
 app.use("/cart", CartRouter);
-app.use("/cartegorie", CategorieRouter);
+app.use("/category", CategorieRouter);
 app.use("/checkout", CheckOutRouter);
 app.use("/pricelist", PriceListRouter);
 
