@@ -92,10 +92,21 @@ module.exports.removeProduct = async (req, res, next) => {
 // @Access: Private
 module.exports.updateProduct = async (req, res, next) => {
   try {
-    await Product.findByIdAndUpdate(req.body.id, req.body, { new: true })
-      .then((data) => res.status(200).send({ data }))
-      .catch((error) => res.status(400).send({ error }));
+    const { id, ...updateData } = req.body;
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { new: true }
+    );
+
+    console.log(req.body);
+
+    res.status(200).send({ data: updatedProduct });
   } catch (error) {
-    next(error);
+    console.error(error);
+    res.status(400).send({ error });
   }
 };
+
+
