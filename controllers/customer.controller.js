@@ -117,3 +117,25 @@ module.exports.updateProfile = async (req,res,next) => {
     next(error);
   }
 }
+
+// Delete customer
+// @Access: Private
+// @Method: DELETE
+module.exports.deleteCustomer = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // Check if the customer exists
+    const customer = await Customer.findById(id);
+    if (!customer) {
+      return res.status(404).send({ message: "Customer not found!" });
+    }
+
+    // Delete the customer
+    await Customer.findByIdAndDelete(id);
+
+    return res.status(200).send({ message: "Customer deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
