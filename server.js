@@ -9,6 +9,8 @@ const CartRouter = require("./routes/cart.route");
 const CategorieRouter = require("./routes/categorie.route");
 const PriceListRouter = require("./routes/pricelist.route");
 const CheckOutRouter = require("./routes/checkout.route");
+const OrderRouter = require("./routes/order.route");
+
 const { rateLimit } = require("express-rate-limit")
 
 const app = express();
@@ -41,6 +43,7 @@ app.use("/product", productRouter);
 app.use("/cart", CartRouter);
 app.use("/category", CategorieRouter);
 app.use("/checkout", CheckOutRouter);
+app.use("/order", OrderRouter);
 app.use("/pricelist", PriceListRouter);
 
 // page not found

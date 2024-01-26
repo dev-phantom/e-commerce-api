@@ -7,7 +7,6 @@ module.exports.addToCart = async (req, res, next) => {
   try {
     // get the user and the product ID
     const { product_id, customer_id } = req.body;
-
     if (!product_id || !customer_id)
       return res.status(400).send({ message: "Cusotmer or product ID is required" });
     
@@ -47,7 +46,6 @@ module.exports.addToQuatity = async (req,res,next) => {
 
       cart.product_quatity += 1;
       await cart.save();
-      console.log(cart);
       return res.status(200).send({ cart: cart._id });
 
     } else {

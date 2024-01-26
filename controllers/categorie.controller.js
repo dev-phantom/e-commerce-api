@@ -59,7 +59,6 @@ module.exports.getByQuery = async (req, res, next) => {
     if (!category) {
       return res.status(404).send({ error: "Category not found" });
     }
-
     // Check for subcategories
     if (subcat) {
       const subcategory = category.subcategories.find(
@@ -87,7 +86,7 @@ module.exports.getByQuery = async (req, res, next) => {
           product_sub_sub_cat: subsubcategory,
         });
 
-        return res.status(200).send({ products });
+        return res.status(200).send(products);
       }
 
       // Retrieve products from the database based on the selected subcategory
@@ -96,12 +95,12 @@ module.exports.getByQuery = async (req, res, next) => {
         product_sub_cat: subcat,
       });
 
-      return res.status(200).send({ products });
+      return res.status(200).send(products);
     }
 
     // Retrieve products from the database based on the selected category
     const products = await Product.find({ product_cat: cat });
-    return res.status(200).send({ products });
+    return res.status(200).send(products);
   } catch (error) {
     next(error);
   }

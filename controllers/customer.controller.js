@@ -68,7 +68,6 @@ module.exports.loginUser = async (req, res, next) => {
 // get all customers/users
 module.exports.getAllCustomers = async (req,res,next) => {
   try{
-
     const customers = await Customer.find();
     return res.status(200).send({ customers });
 
@@ -79,9 +78,10 @@ module.exports.getAllCustomers = async (req,res,next) => {
 
 // get single customer/user
 module.exports.getSingleCustomer = async (req,res,next) => {
-  try{
 
-    const customer = await Customer.find();
+  try{
+    let { id } = req.params
+    const customer = await Customer.findById({_id: id});
     return res.status(200).send({ customer });
 
   } catch(error){
