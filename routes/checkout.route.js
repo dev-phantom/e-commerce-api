@@ -1,17 +1,15 @@
 const { Router } = require("express");
 
-const { returnPrice,returnCheck } = require("../controllers/checkout.controller");
+const { addressBook, addAdress } = require("../controllers/checkout.controller");
 
 const checkOutRouter = Router();
 
 // 1
-checkOutRouter.post("/price", returnPrice);
+checkOutRouter.post("/price", addAdress);
 
 
 // 5
-checkOutRouter.get("/price/:id", returnCheck);
+checkOutRouter.get("/address/:id", addressBook);
 
-// 2
-// checkOutRouter.post("/pay",);
 
 module.exports = checkOutRouter;

@@ -68,7 +68,6 @@ module.exports.loginUser = async (req, res, next) => {
 // get all customers/users
 module.exports.getAllCustomers = async (req,res,next) => {
   try{
-
     const customers = await Customer.find();
     return res.status(200).send({ customers });
 
@@ -79,9 +78,10 @@ module.exports.getAllCustomers = async (req,res,next) => {
 
 // get single customer/user
 module.exports.getSingleCustomer = async (req,res,next) => {
-  try{
 
-    const customer = await Customer.find();
+  try{
+    let { id } = req.params
+    const customer = await Customer.findById({_id: id});
     return res.status(200).send({ customer });
 
   } catch(error){
@@ -117,3 +117,25 @@ module.exports.updateProfile = async (req,res,next) => {
     next(error);
   }
 }
+
+// Delete customer
+// @Access: Private
+// @Method: DELETE
+module.exports.deleteCustomer = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // Check if the customer exists
+    const customer = await Customer.findById(id);
+    if (!customer) {
+      return res.status(404).send({ message: "Customer not found!" });
+    }
+
+    // Delete the customer
+    await Customer.findByIdAndDelete(id);
+
+    return res.status(200).send({ message: "Customer deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};

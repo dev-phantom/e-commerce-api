@@ -6,6 +6,7 @@ const {
   removeProduct,
   updateProduct
 } = require("../controllers/product.controller");
+const { getByQuery } = require("../controllers/categorie.controller");
 // const { upload } = require("../middleware/uploads");
 
 const productRouter = Router();
@@ -24,5 +25,8 @@ productRouter.delete("/remove", removeProduct);
 
 // update product
 productRouter.put("/update", updateProduct);
+
+productRouter.get("/categories", getByQuery);
+
 
 module.exports = productRouter;

@@ -5,7 +5,8 @@ const {
   getAllCustomers,
   updateProfile,
   getMyProfile,
-  getSingleCustomer
+  getSingleCustomer,
+  deleteCustomer
 } = require("../controllers/customer.controller");
 
 const CustomerRouter = Router();
@@ -28,5 +29,9 @@ CustomerRouter.get("/customers/:id",getSingleCustomer);
 
 // update profile
 CustomerRouter.put("/update/profile", updateProfile);
+
+// delete profile
+CustomerRouter.delete("/customers/:id", deleteCustomer);
+
 
 module.exports = CustomerRouter;
