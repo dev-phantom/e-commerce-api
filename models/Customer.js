@@ -20,7 +20,7 @@ const CustomerSchema = new Schema(
     },
     phone_number: {
       type: String,
-      required: true,
+      default: ""
     },
     role: {
       type: Number,

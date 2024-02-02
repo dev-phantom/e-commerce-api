@@ -11,7 +11,7 @@ module.exports.createAccount = async (req, res, next) => {
   try {
     const { first_name, last_name,phone_number, email, password } = req.body;
 
-    if (!first_name || !last_name || !email || !phone_number || !password) {
+    if (!first_name || !last_name || !email || !password) {
       return res.status(400).send({ message: "Credentials are required!" });
     }
 
