@@ -16,6 +16,10 @@ const ProductSchema = new Schema(
       type: Number,
       required: true,
     },
+    product_cost_price: {
+      type: Number,
+      required: true,
+    },
     product_des: {
       type: String,
       trim: true,

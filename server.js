@@ -3,6 +3,7 @@ const express = require("express");
 const PORT = process.env.PORT || 3000;
 const helmet = require("helmet");
 const cors = require("cors");
+const path = require("path");
 const CustomerRouter = require("./routes/customer.route");
 const productRouter = require("./routes/product.router");
 const CartRouter = require("./routes/cart.route");
@@ -11,6 +12,7 @@ const PriceListRouter = require("./routes/pricelist.route");
 const CheckOutRouter = require("./routes/checkout.route");
 const OrderRouter = require("./routes/order.route");
 const ContactRouter = require("./routes/contact.route");
+const NewsRouter = require("./routes/newsletter.route");
 
 const { rateLimit } = require("express-rate-limit")
 
@@ -27,7 +29,7 @@ const limiter = rateLimit({
 const connectDB = require("./config/db");
 
 // middlewares
-// app.use(express.static(path.join(__dirname,"public")));
+app.use(express.static(path.join(__dirname,"public")));
 app.use(helmet());
 app.use(
   cors({
@@ -47,6 +49,7 @@ app.use("/checkout", CheckOutRouter);
 app.use("/order", OrderRouter);
 app.use("/pricelist", PriceListRouter);
 app.use("/contact", ContactRouter);
+app.use("/news", NewsRouter);
 
 // page not found
 app.get("*", (req, res) => {

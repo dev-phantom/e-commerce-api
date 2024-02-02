@@ -52,6 +52,7 @@ module.exports.addProduct = async (req, res, next) => {
       product_sub_sub_cat,
       product_rate,
       product_image,
+      product_cost_price,
     } = req.body;
 
     if (
@@ -60,7 +61,8 @@ module.exports.addProduct = async (req, res, next) => {
       !product_price ||
       !product_cat ||
       !product_rate ||
-      !product_total
+      !product_total || 
+      !product_cost_price
     )
       return res.status(400).send({ message: "Field are required!" });
 
@@ -78,6 +80,7 @@ module.exports.addProduct = async (req, res, next) => {
       product_sub_sub_cat,
       product_rate,
       product_total,
+      product_cost_price,
     })
       .then((data) => res.status(201).send({ data }))
       .catch((error) => console.log("1", error));

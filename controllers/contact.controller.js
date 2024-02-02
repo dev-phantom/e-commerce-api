@@ -2,9 +2,9 @@ const Contact = require("../models/Contact");
 
 async function sendMessage(req,res,next){
 	try{
-		const { fullname,email,subject,message } = req.body;
+		const { fullname,email,message } = req.body;
 
-		if(!fullname || !email || !subject || !message) return res.status(422).send({ message: "All fields are required!"});
+		if(!fullname || !email || !message) return res.status(422).send({ message: "All fields are required!"});
 
 		const saved = await Contact.create({
 			fullname,email,subject,message

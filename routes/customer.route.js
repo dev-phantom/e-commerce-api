@@ -6,7 +6,10 @@ const {
   updateProfile,
   getMyProfile,
   getSingleCustomer,
-  deleteCustomer
+  deleteCustomer,
+  forgetPassword,
+  verifyCode,
+  updateUserPassword
 } = require("../controllers/customer.controller");
 
 const CustomerRouter = Router();
@@ -32,6 +35,15 @@ CustomerRouter.put("/update/profile", updateProfile);
 
 // delete profile
 CustomerRouter.delete("/customers/:id", deleteCustomer);
+
+// forget password
+CustomerRouter.post("/customers/forget", forgetPassword);
+
+// verify otp
+CustomerRouter.post("/customers/verify", verifyCode);
+
+// update password
+CustomerRouter.post("/customers/update", updateUserPassword);
 
 
 module.exports = CustomerRouter;

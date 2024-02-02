@@ -1,5 +1,8 @@
 const Customer = require("../models/Customer");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
+const otpGenerator = require("otp-generator");
+const client = require("../config/redis");
 
 // @Dec: Create account
 // @Access: Public
@@ -139,3 +142,109 @@ module.exports.deleteCustomer = async (req, res, next) => {
     next(error);
   }
 };
+
+// forget password 
+module.exports.forgetPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    if(!email) return res.status(400).send({ message: "All Fields Are Required!" });
+
+    // check if email does not exits
+    const exitMail = await Customer.findOne({ email });
+    if(!exitMail) return res.status(404).send({ message: "Email Not Found, Please Verify Your Email And Try Again" });
+
+   // send mail
+   const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.USERNAME,
+          pass: process.env.PASSWORD
+       },
+    });
+
+   // generate OTP
+   const otp = otpGenerator.generate(6, {
+      lowerCaseAlphabets: false,
+      upperCaseAlphabets: false,
+      specialChars: false
+    });
+
+   await client.connect();
+
+   await client.set(`${exitMail._id}`, `${otp}`);
+
+   const info = await transporter.sendMail({
+    from: '"Admin" <farm2home.com.ng>',
+    to: `${exitMail.email}`, 
+    subject: "Confirmation code ✔",
+    text: `Your verification code is: ${otp}`,
+  });
+
+  if(info.messageId){
+    return res.status(200).send(true);
+  } else {
+    return res.status(400).send({ message: "An error occurred!" });
+  }
+
+  } catch (error) {
+    next(error);
+  }
+};
+// verify code
+module.exports.verifyCode = async (req,res,next) => {
+  try {
+    const { email,code } = req.body;
+
+    if(!email || !code) return res.status(422).send({ message: "All Fields Are Required!" });
+
+    // find user by email
+
+    const user = await Customer.findOne({ email });
+    if(!user) return res.status(404).send({ message: "No account Found with this emaill!" });
+
+   const value = await client.get(`${user._id}`);
+
+   if(value === code){
+    await client.del(`${user._id}`)
+    return res.status(200).send(true);
+   } else {
+    return res.status(400).send({ message: "Invalid code!" });
+   }
+
+  } catch (error) {
+    next(error);
+  }
+}
+// update user password
+module.exports.updateUserPassword = async (req,res,next) => {
+  try {
+    const { email,password } = req.body;
+
+
+    if(!email || !password) return res.status(422).send({ message: "All Fields Are Required!" });
+
+    // find user by email
+    const user = await Customer.findOne({ email });
+    if(!user) return res.status(404).send({ message: "No account Found with this emaill!" });
+
+    // hashed password
+    const hashPassword = await bcrypt.hash(password,13);
+
+    // update password
+    user.password = hashPassword;
+    const saved = await user.save();
+
+    if(saved){
+      return res.status(200).send(true);
+    } else {
+      return res.status(400).send({ message: "Unable to update your password." });
+    }
+
+
+  } catch (error) {
+    next(error);
+  }
+}
