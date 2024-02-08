@@ -1,6 +1,5 @@
 const { Router } = require("express");
-
-const { addOrder, getOrdersByCustomer, updateOrderStatus, getAllOrders } = require("../controllers/order.controller");
+const { addOrder, updateOrderStatus, getAllOrders, getOrdersByOrderId } = require("../controllers/order.controller");
 
 const OrderRouter = Router();
 
@@ -8,7 +7,7 @@ const OrderRouter = Router();
 OrderRouter.post("/", addOrder);
 
 // Get orders for a specific customer
-OrderRouter.get("/:customer_id", getOrdersByCustomer);
+OrderRouter.get("/:orderID", getOrdersByOrderId);
 
 // Get all orders
 OrderRouter.get("/", getAllOrders);

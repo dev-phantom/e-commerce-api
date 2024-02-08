@@ -7,7 +7,7 @@ async function sendMessage(req,res,next){
 		if(!fullname || !email || !message) return res.status(422).send({ message: "All fields are required!"});
 
 		const saved = await Contact.create({
-			fullname,email,subject,message
+			fullname,email,message
 		});
 
 		if(saved) return res.status(200).send({ message: "Message sent!"});
