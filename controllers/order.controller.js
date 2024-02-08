@@ -1,5 +1,7 @@
 const Order = require("../models/Order");
 const Cart = require("../models/Cart");
+const mongoose = require('mongoose');
+
 
 async function addOrder(req, res, next) {
   const { orderID, products, address, customer_id, amount_paid } = req.body;
@@ -10,6 +12,7 @@ async function addOrder(req, res, next) {
   try {
     // Create order with status
     const order = await Order.create({ address, orderID, products, customer_id, amount_paid });
+    console.log(order)
 
     // Delete items from the cart
     await Cart.deleteMany({ customer_id });
@@ -21,11 +24,12 @@ async function addOrder(req, res, next) {
   }
 }
 
-async function getOrdersByCustomer(req, res, next) {
-  const { customer_id } = req.params;
+
+async function getOrdersByOrderId(req, res, next) {
+  const { orderID } = req.params;
 
   try {
-    const orders = await Order.find({ customer_id });
+    const orders = await Order.find({ orderID }).populate('customer_id');
     res.status(200).send(orders);
   } catch (error) {
     res.status(500).send({ message: "Error retrieving orders for the customer." });
@@ -52,11 +56,11 @@ async function updateOrderStatus(req, res, next) {
 
 async function getAllOrders(req, res, next) {
 	try {
-	  const orders = await Order.find();
-	  res.status(200).send(orders);
+    const orders = await Order.find().populate('customer_id');
+    res.status(200).send(orders);
 	} catch (error) {
 	  console.error(error);
 	  res.status(500).send({ message: "Error retrieving all orders." });
 	}
   }
-module.exports = { addOrder, getOrdersByCustomer, getAllOrders, updateOrderStatus };
+module.exports = { addOrder, getAllOrders, updateOrderStatus, getOrdersByOrderId };
