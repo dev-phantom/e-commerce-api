@@ -49,7 +49,7 @@ const ProductSchema = new Schema(
       required: true,
     },
     product_total: {
-      type: String,
+      type: Number,
       default: 1,
       required: true,
     },
