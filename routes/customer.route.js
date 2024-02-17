@@ -9,8 +9,10 @@ const {
   deleteCustomer,
   forgetPassword,
   verifyCode,
-  updateUserPassword
+  updateUserPassword,
+  getCustomerCountByMonth
 } = require("../controllers/customer.controller");
+
 
 const CustomerRouter = Router();
 
@@ -45,5 +47,8 @@ CustomerRouter.post("/customers/verify", verifyCode);
 // update password
 CustomerRouter.post("/customers/update", updateUserPassword);
 
+
+// update password
+CustomerRouter.get("/customer/customer-per-month", getCustomerCountByMonth);
 
 module.exports = CustomerRouter;

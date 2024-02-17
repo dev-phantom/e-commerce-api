@@ -248,3 +248,24 @@ module.exports.updateUserPassword = async (req,res,next) => {
     next(error);
   }
 }
+ module.exports.getCustomerCountByMonth = async(req, res, next) => {
+  try {
+    const customers = await Customer.find();
+    const customerCountByMonth = {};
+
+    customers.forEach((customer) => {
+      const date = new Date(customer.createdAt);
+      const month = date.toLocaleString('default', { month: 'short' }); // Get month name abbreviation
+
+      if (!customerCountByMonth[month]) {
+        customerCountByMonth[month] = 1;
+      } else {
+        customerCountByMonth[month]++;
+      }
+    });
+
+    res.status(200).json({ customerCountByMonth });
+  } catch (error) {
+    res.status(500).json({ error: "Error calculating total customers by month" });
+  }
+}

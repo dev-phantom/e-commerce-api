@@ -1,6 +1,5 @@
 const Order = require("../models/Order");
 const Cart = require("../models/Cart");
-const mongoose = require("mongoose");
 const Product = require("../models/Product");
 
 async function addOrder(req, res, next) {
@@ -31,10 +30,10 @@ async function addOrder(req, res, next) {
       const newProductTotal = product.product_total - productQuantity;
 
       // Update product total
-      let  resp = await Product.findByIdAndUpdate(productId, {
+      let resp = Product.findByIdAndUpdate(productId, {
         product_total: newProductTotal,
       });
-      console.log(resp)
+      console.log(resp);
     }
     // Delete items from the cart
     await Cart.deleteMany({ customer_id });
@@ -52,7 +51,9 @@ async function getOrdersByCustomer(req, res, next) {
     const orders = await Order.find({ customer_id });
     res.status(200).send(orders);
   } catch (error) {
-    res.status(500).send({ message: "Error retrieving orders for the customer." });
+    res
+      .status(500)
+      .send({ message: "Error retrieving orders for the customer." });
   }
 }
 
@@ -100,10 +101,67 @@ async function getAllOrders(req, res, next) {
     res.status(500).send({ message: "Error retrieving all orders." });
   }
 }
+
+async function getTotalProductsSold(req, res, next) {
+  try {
+    const orders = await Order.find();
+    let totalProductsSold = 0;
+
+    orders.forEach((order) => {
+      order.products.forEach((product) => {
+        totalProductsSold += product.product_id.product_total;
+      });
+    });
+    res.status(200).json(totalProductsSold);
+  } catch (error) {
+    console.error("Error calculating total products sold:", error);
+    throw error;
+  }
+}
+
+async function getTotalRevenue(req, res, next) {
+  try {
+    const orders = await Order.find();
+    let totalRevenue = 0;
+    orders.forEach((order) => {
+      totalRevenue += order.amount_paid;
+    });
+    res.status(200).json({ totalRevenue });
+  } catch (error) {
+    res.status(500).json({ error: "Error calculating total revenue" });
+  }
+}
+
+async function getTotalRevenueByMonth(req, res, next) {
+  try {
+    const orders = await Order.find();
+    const revenueByMonth = {};
+
+    orders.forEach((order) => {
+      const date = new Date(order.createdAt);
+      const month = date.toLocaleString('default', { month: 'short' })// Months are 0-indexed, so add 1
+      const revenue = order.amount_paid;
+
+      if (!revenueByMonth[month]) {
+        revenueByMonth[month] = revenue;
+      } else {
+        revenueByMonth[month] += revenue;
+      }
+    });
+
+    res.status(200).json({ revenueByMonth });
+  } catch (error) {
+    res.status(500).json({ error: "Error calculating total revenue by month" });
+  }
+}
+
 module.exports = {
   addOrder,
   getAllOrders,
   updateOrderStatus,
   getOrdersByOrderId,
   getOrdersByCustomer,
+  getTotalRevenue,
+  getTotalProductsSold,
+  getTotalRevenueByMonth,
 };
