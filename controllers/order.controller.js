@@ -20,6 +20,7 @@ async function addOrder(req, res, next) {
     // Decrement product quantity
     for (const item of products) {
       const productId = item.product_id._id;
+
       const productQuantity = parseInt(item.product_quatity);
       // Fetch current product total
       const product = await Product.findById(productId);
@@ -28,12 +29,21 @@ async function addOrder(req, res, next) {
       }
       // Calculate new product total
       const newProductTotal = product.product_total - productQuantity;
-
       // Update product total
-      let resp = Product.findByIdAndUpdate(productId, {
-        product_total: newProductTotal,
-      });
-      console.log(resp);
+      let updatedProduct = await Product.findByIdAndUpdate(
+        productId,
+        {
+          product_total: newProductTotal,
+        },
+        { new: true }
+      ); // Ensure that you get the updated document
+
+      if (!updatedProduct) {
+        console.log(`Product with ID ${productId} not found.`);
+        // Handle the case where product is not found
+      } else {
+        console.log("Product updated successfully:", updatedProduct);
+      }
     }
     // Delete items from the cart
     await Cart.deleteMany({ customer_id });
@@ -139,7 +149,7 @@ async function getTotalRevenueByMonth(req, res, next) {
 
     orders.forEach((order) => {
       const date = new Date(order.createdAt);
-      const month = date.toLocaleString('default', { month: 'short' })// Months are 0-indexed, so add 1
+      const month = date.toLocaleString("default", { month: "short" }); // Months are 0-indexed, so add 1
       const revenue = order.amount_paid;
 
       if (!revenueByMonth[month]) {

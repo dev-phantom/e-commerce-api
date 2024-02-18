@@ -35,9 +35,6 @@ module.exports.getSingleProduct = async (req, res, next) => {
   }
 };
 
-// @Des: Add product
-// @Method: POST
-// @Access: Private
 module.exports.addProduct = async (req, res, next) => {
   try {
     const {

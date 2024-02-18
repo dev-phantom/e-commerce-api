@@ -1,32 +1,32 @@
 const Cart = require("../models/Cart");
 
-// @Des: Add to the customer cart
-// @Access: Private
-// @Method: POST
 module.exports.addToCart = async (req, res, next) => {
   try {
     // get the user and the product ID
     const { product_id, customer_id } = req.body;
     if (!product_id || !customer_id)
-      return res.status(400).send({ message: "Cusotmer or product ID is required" });
+      return res.status(400).send({ message: "Customer or product ID is required" });
     
-      // save to cart
-      await Cart.create({
-        product_id,
-        customer_id,
-      })
-        .then(async (data) => {
-          const result = await data.populate("product_id");
-          return res
-            .status(200)
-            .send({ product: result });
-        })
-        .catch((error) => res.status(400).send({ error }));
+    // Check if the product already exists in the cart for the customer
+    const existingCartItem = await Cart.findOne({ product_id, customer_id });
+    if (existingCartItem) {
+      return res.status(400).send({ message: "Product already exists in the cart" });
+    }
+    else{
+    // Save to cart
+    const cartItem = await Cart.create({
+      product_id,
+      customer_id,
+    });
+
+    // Populate product details
+    const result = await cartItem.populate("product_id");
+    return res.status(200).send({ product: result });
+  }
   } catch (error) {
     next(error);
   }
 };
-
 module.exports.getSingleCart = async (req,res,next) => {
   try{
 
