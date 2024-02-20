@@ -18,8 +18,8 @@ const NotificationRouter = require("./routes/notification.route");
 const { rateLimit } = require("express-rate-limit")
 
 const app = express();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
+//const http = require("http").createServer(app);
+const socket = require("socket.io");
 
 
 const limiter = rateLimit({
@@ -66,10 +66,16 @@ app.get("*", (req, res) => {
 // app.use((error,req,res,next) => {});
 
 connectDB()
- .then(() => {
-   http.listen(PORT, () => console.log("Server running on port...", PORT));
- })
- .catch(error => console.error(error))
+const server = app.listen(PORT, () => console.log("Server running on port...", PORT));
+// .catch(error => console.error(error))
+ 
+ 
+const io = socket(server, {
+  cors: {
+    origin: process.env.NODE_ENV === "development" ? "*" : "*",
+    credentials: true,
+  },
+});
 
 // notifications
 io.on("connection",(socket) => {
