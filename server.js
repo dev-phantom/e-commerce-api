@@ -18,8 +18,6 @@ const NotificationRouter = require("./routes/notification.route");
 const { rateLimit } = require("express-rate-limit")
 
 const app = express();
-//const http = require("http").createServer(app);
-const socket = require("socket.io");
 
 
 const limiter = rateLimit({
@@ -61,30 +59,8 @@ app.use("/notification",NotificationRouter);
 app.get("*", (req, res) => {
   res.status(404).send("Page not found!");
 });
-
-// general error handler
-// app.use((error,req,res,next) => {});
-
-connectDB()
-const server = app.listen(PORT, () => console.log("Server running on port...", PORT));
-// .catch(error => console.error(error))
- 
- 
-const io = socket(server, {
-  cors: {
-    origin: process.env.NODE_ENV === "development" ? "*" : "*",
-    credentials: true,
-  },
-});
-
-// notifications
-io.on("connection",(socket) => {
-	// notify the user
-	socket.on("sendNote",(socketid,message) => {
-		io.to(socketid).emit("message",message);
-	});
-	
-	socket.on("yoo",(message) => {
-	   io.emit("message",message)
-	});
-});
+  connectDB()
+   .then(() => {
+	 app.listen(PORT, () => console.log("Server running on port...", PORT));
+   })
+   .catch(error => console.error(error))
