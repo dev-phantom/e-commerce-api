@@ -6,6 +6,10 @@ const NotificationSchema = new mongoose.Schema({
 		ref: "Customer",
 		required: true,
 	},
+	orderId: {
+	    type: mongoose.Schema.Types.ObjectId,
+	    ref: "Order",
+	},
 	message: {
 		type: String,
 		trim: true,
