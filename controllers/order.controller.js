@@ -1,6 +1,8 @@
 const Order = require("../models/Order");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
+const Notification = require("../models/Notification");
+const Customer = require("../models/Customer");
 
 async function addOrder(req, res, next) {
   const { orderID, products, address, customer_id, amount_paid } = req.body;
@@ -45,9 +47,15 @@ async function addOrder(req, res, next) {
         console.log("Product updated successfully:", updatedProduct);
       }
     }
+    
+    const user = await Customer.findById(customer_id)
+    
+    await Notification.create({ orderId: orderID,customer_id, message: `${user?.first_name} ${user?.last_name} placed an order!`});
+    
     // Delete items from the cart
     await Cart.deleteMany({ customer_id });
 
+    
     res.status(200).send({ order });
   } catch (error) {
     console.error(error);

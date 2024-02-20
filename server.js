@@ -13,10 +13,14 @@ const CheckOutRouter = require("./routes/checkout.route");
 const OrderRouter = require("./routes/order.route");
 const ContactRouter = require("./routes/contact.route");
 const NewsRouter = require("./routes/newsletter.route");
+const NotificationRouter = require("./routes/notification.route");
 
 const { rateLimit } = require("express-rate-limit")
 
 const app = express();
+//const http = require("http").createServer(app);
+const socket = require("socket.io");
+
 
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, 
@@ -38,7 +42,8 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//app.use(limiter)
+app.use(limiter);
+
 // routes
 
 app.use("/", CustomerRouter);
@@ -50,15 +55,36 @@ app.use("/order", OrderRouter);
 app.use("/pricelist", PriceListRouter);
 app.use("/contact", ContactRouter);
 app.use("/news", NewsRouter);
+app.use("/notification",NotificationRouter);
 
 // page not found
 app.get("*", (req, res) => {
   res.status(404).send("Page not found!");
 });
 
-connectDB()
- .then(() => {
-   app.listen(PORT, () => console.log("Server running on port...", PORT));
- })
- .catch(error => console.error(error))
+// general error handler
+// app.use((error,req,res,next) => {});
 
+connectDB()
+const server = app.listen(PORT, () => console.log("Server running on port...", PORT));
+// .catch(error => console.error(error))
+ 
+ 
+const io = socket(server, {
+  cors: {
+    origin: process.env.NODE_ENV === "development" ? "*" : "*",
+    credentials: true,
+  },
+});
+
+// notifications
+io.on("connection",(socket) => {
+	// notify the user
+	socket.on("sendNote",(socketid,message) => {
+		io.to(socketid).emit("message",message);
+	});
+	
+	socket.on("yoo",(message) => {
+	   io.emit("message",message)
+	});
+});
