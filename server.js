@@ -62,6 +62,9 @@ app.get("*", (req, res) => {
   res.status(404).send("Page not found!");
 });
 
+// general error handler
+// app.use((error,req,res,next) => {});
+
 connectDB()
  .then(() => {
    http.listen(PORT, () => console.log("Server running on port...", PORT));
@@ -73,5 +76,5 @@ io.on("connection",(socket) => {
 	// notify the user
 	socket.on("sendNote",(socketid,message) => {
 		socket.to(socketid).emit("message",message);
-	})
+	});
 });
