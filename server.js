@@ -18,7 +18,7 @@ const NewsRouter = require("./routes/newsletter.route");
 const NotificationRouter = require("./routes/notification.route");
 const { getAllNotifications } = require("./controllers/notification.controller");
 const { Server } = require('socket.io');
-const { rateLimit } = require("express-rate-limit")
+
 
 const app = express();
 app.use(cors()); // Add cors middleware
@@ -42,15 +42,6 @@ io.on('connection', (socket) => {
   // We can write our socket event listeners in here...
   getAllNotifications(io);
 });
-  
-
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-    standardHeaders: true,
-    legacyHeaders: false,
-})
-
 
 // connect to DB 
 const connectDB = require("./config/db");
@@ -60,7 +51,6 @@ app.use(express.static(path.join(__dirname,"public")));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(limiter);
 
 // routes
 app.use("/", CustomerRouter);
