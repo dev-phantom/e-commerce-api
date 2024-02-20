@@ -75,6 +75,10 @@ connectDB()
 io.on("connection",(socket) => {
 	// notify the user
 	socket.on("sendNote",(socketid,message) => {
-		socket.to(socketid).emit("message",message);
+		io.to(socketid).emit("message",message);
+	});
+	
+	socket.on("yoo",(message) => {
+	   io.emit("message",message)
 	});
 });
