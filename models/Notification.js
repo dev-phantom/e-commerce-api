@@ -10,6 +10,10 @@ const NotificationSchema = new mongoose.Schema({
 	    type: String,
 	    ref: "Order",
 	},
+	full_name: {
+	    type: String,
+	    ref: "Order",
+	},
 	message: {
 		type: String,
 		trim: true,

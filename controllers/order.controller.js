@@ -39,12 +39,15 @@ async function addOrder(req, res, next) {
         },
         { new: true }
       ); // Ensure that you get the updated document
-
-     
     }
-    
-    const user = await Customer.findById(customer_id)
-    await Notification.create({ orderId: orderID,customer_id, message: `${user?.first_name} ${user?.last_name} placed an order!`});
+
+    const user = await Customer.findById(customer_id);
+    await Notification.create({
+      orderId: orderID,
+      customer_id,
+      full_name:`${user?.first_name} ${user?.last_name}`,
+      message: "placed an order!",
+    });
     // Delete items from the cart
     await Cart.deleteMany({ customer_id });
 
