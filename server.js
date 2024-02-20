@@ -1,5 +1,7 @@
 require("dotenv").config();
 const express = require("express");
+const http = require("http"); // Require HTTP module
+const socketIo = require("socket.io"); // Require socket.io module
 const PORT = process.env.PORT || 3000;
 const helmet = require("helmet");
 const cors = require("cors");
@@ -14,18 +16,41 @@ const OrderRouter = require("./routes/order.route");
 const ContactRouter = require("./routes/contact.route");
 const NewsRouter = require("./routes/newsletter.route");
 const NotificationRouter = require("./routes/notification.route");
-
+const { getAllNotifications } = require("./controllers/notification.controller");
+const { Server } = require('socket.io');
 const { rateLimit } = require("express-rate-limit")
 
 const app = express();
+app.use(cors()); // Add cors middleware
 
+const server = http.createServer(app); // Add this
+
+// Add this
+// Create an io server and allow for CORS from http://localhost:3000 with GET and POST methods
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
+
+// Add this
+// Listen for when the client connects via socket.io-client
+io.on('connection', (socket) => {
+  console.log(`User connected ${socket.id}`);
+
+  // We can write our socket event listeners in here...
+  getAllNotifications(io);
+});
+  
 
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, 
-	max: 100,
-	standardHeaders: true,
-	legacyHeaders: false,
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
 })
+
 
 // connect to DB 
 const connectDB = require("./config/db");
@@ -33,17 +58,11 @@ const connectDB = require("./config/db");
 // middlewares
 app.use(express.static(path.join(__dirname,"public")));
 app.use(helmet());
-app.use(
-  cors({
-    origin: "*",
-  })
-);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(limiter);
 
 // routes
-
 app.use("/", CustomerRouter);
 app.use("/product", productRouter);
 app.use("/cart", CartRouter);
@@ -59,8 +78,9 @@ app.use("/notification",NotificationRouter);
 app.get("*", (req, res) => {
   res.status(404).send("Page not found!");
 });
-  connectDB()
-   .then(() => {
-	 app.listen(PORT, () => console.log("Server running on port...", PORT));
-   })
-   .catch(error => console.error(error))
+
+connectDB()
+    .then(() => {
+        server.listen(PORT, () => console.log("Server running on port...", PORT));
+    })
+    .catch(error => console.error(error))

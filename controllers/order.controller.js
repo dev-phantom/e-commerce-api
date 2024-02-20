@@ -40,21 +40,14 @@ async function addOrder(req, res, next) {
         { new: true }
       ); // Ensure that you get the updated document
 
-      if (!updatedProduct) {
-        console.log(`Product with ID ${productId} not found.`);
-        // Handle the case where product is not found
-      } else {
-        console.log("Product updated successfully:", updatedProduct);
-      }
+     
     }
     
     const user = await Customer.findById(customer_id)
     await Notification.create({ orderId: orderID,customer_id, message: `${user?.first_name} ${user?.last_name} placed an order!`});
-    
     // Delete items from the cart
     await Cart.deleteMany({ customer_id });
 
-    
     res.status(200).send({ order });
   } catch (error) {
     console.error(error);
