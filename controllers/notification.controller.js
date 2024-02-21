@@ -1,6 +1,6 @@
 const Notification = require("../models/Notification");
 
-module.exports.getAllNotifications = async (io) => {
+module.exports.getAllNotifications = async (io, res) => {
     try {
         const notifications = await Notification.find();
         io.emit("notification", notifications); // Emit notifications to all connected clients
