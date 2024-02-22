@@ -3,6 +3,8 @@ const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const Notification = require("../models/Notification");
 const Customer = require("../models/Customer");
+const Market = require("../models/Market");
+
 
 async function addOrder(req, res, next) {
   const { orderID, products, address, customer_id, amount_paid } = req.body;
@@ -18,7 +20,21 @@ async function addOrder(req, res, next) {
       products,
       customer_id,
       amount_paid,
+      markets: []
     });
+
+    // Get markets based on address or city
+    const markets = await Market.find({ 
+      $or: [
+        { address: { $regex: new RegExp(address.address, "i") } }, // Case-insensitive address match
+        { city: { $regex: new RegExp(address.city, "i") } } // Case-insensitive city match
+      ]
+    });
+    // Update order with market information
+    order.markets = markets;
+    await order.save();
+    // You can now use the 'markets' array to handle the logic for matching markets to the order
+
     // Decrement product quantity
     for (const item of products) {
       const productId = item.product_id._id;
@@ -32,7 +48,7 @@ async function addOrder(req, res, next) {
       // Calculate new product total
       const newProductTotal = product.product_total - productQuantity;
       // Update product total
-      let updatedProduct = await Product.findByIdAndUpdate(
+      await Product.findByIdAndUpdate(
         productId,
         {
           product_total: newProductTotal,
@@ -50,13 +66,14 @@ async function addOrder(req, res, next) {
     });
     // Delete items from the cart
     await Cart.deleteMany({ customer_id });
-
-    res.status(200).send({ order });
+    console.log(order)
+    res.status(200).send({ order, markets });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "An unknown error occurred..." });
   }
 }
+
 async function getOrdersByCustomer(req, res, next) {
   const { customer_id } = req.params;
 

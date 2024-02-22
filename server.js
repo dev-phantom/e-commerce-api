@@ -16,6 +16,7 @@ const OrderRouter = require("./routes/order.route");
 const ContactRouter = require("./routes/contact.route");
 const NewsRouter = require("./routes/newsletter.route");
 const NotificationRouter = require("./routes/notification.route");
+const MarketplaceRouter = require("./routes/marketplace.route");
 const { getAllNotifications } = require("./controllers/notification.controller");
 const { Server } = require('socket.io');
 
@@ -63,6 +64,7 @@ app.use("/pricelist", PriceListRouter);
 app.use("/contact", ContactRouter);
 app.use("/news", NewsRouter);
 app.use("/notification",NotificationRouter);
+app.use("/marketplace",MarketplaceRouter);
 
 // page not found
 app.get("*", (req, res) => {
