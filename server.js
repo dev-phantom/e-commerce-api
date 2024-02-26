@@ -22,7 +22,9 @@ const { Server } = require('socket.io');
 
 
 const app = express();
-app.use(cors()); // Add cors middleware
+app.use(cors({
+  origin: '*'
+})); // Add cors middleware
 
 const server = http.createServer(app); // Add this
 
