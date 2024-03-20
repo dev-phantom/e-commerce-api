@@ -69,6 +69,23 @@ async function getAllDistributors(req, res, next) {
       .json({ success: false, message: "Failed to fetch distributors" });
   }
 }
+async function getDistributorsById(req, res, next) {
+  const distributorIds = req.body.ids; // Assuming the array of IDs is sent in the request body with the key "ids"
+
+  if (!distributorIds || !Array.isArray(distributorIds)) {
+    return res.status(400).json({ success: false, message: "Invalid request format. Please provide an array of distributor IDs in the request body with the key 'ids'." });
+  }
+
+  try {
+    const distributors = await Distributor.find({ _id: { $in: distributorIds } }); // Find distributors where _id is in the provided array
+    res.status(200).json({ success: true, data: distributors });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Error retrieving distributors" });
+  }
+}
+
+
 async function deleteDistributor(req, res, next) {
     const distributorId = req.body.id; // Assuming distributorId is provided in the request params
     try {
@@ -109,5 +126,6 @@ module.exports = {
   getAllMarkets,
   getAllDistributors,
   deleteDistributor,
+  getDistributorsById,
   deleteMarket
 };

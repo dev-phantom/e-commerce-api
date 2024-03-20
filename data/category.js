@@ -33,6 +33,11 @@ module.exports.agriculturalCategories = [
       ],
     },
     {
+      category: "Livestock",
+      subcategories: [],
+      subsubcategories: [],
+    },
+    {
       category: "Legumes",
       subcategories: [
         {
