@@ -7,6 +7,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const path = require("path");
 const CustomerRouter = require("./routes/customer.route");
+const ReviewRouter = require("./routes/review.route");
 const productRouter = require("./routes/product.router");
 const CartRouter = require("./routes/cart.route");
 const CategorieRouter = require("./routes/categorie.route");
@@ -65,6 +66,7 @@ app.use("/contact", ContactRouter);
 app.use("/news", NewsRouter);
 app.use("/notification",NotificationRouter);
 app.use("/marketplace",MarketplaceRouter);
+app.use("/review",ReviewRouter);
 
 // page not found
 app.get("*", (req, res) => {
