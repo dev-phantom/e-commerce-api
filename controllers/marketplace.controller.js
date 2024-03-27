@@ -27,7 +27,7 @@ async function addMarket(req, res, next) {
 
 async function getAllMarkets(req, res, next) {
   try {
-    const markets = await Market.find().populate("distributors");
+    const markets = await Market.find().populate("distributors").select("name");
     res.status(200).json({ success: true, data: markets });
   } catch (error) {
     console.error(error);
@@ -119,9 +119,41 @@ async function deleteDistributor(req, res, next) {
       res.status(500).json({ success: false, message: "Failed to delete market" });
     }
   }
+
+  async function deleteCity(req, res, next) {
+    try {
+      await Market.findByIdAndDelete(req.params.id);
+      return res.status(200).send({ message: "Deleted!"});
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Failed to delete city" });
+    }
+  }
+
+  async function editCity(req, res, next) {
+    const { city,id } = req.body;
+    try {
+     const getCity = await Market.findById(id);
+     if(getCity){
+      getCity.city = city
+      await getCity.save();
+     } else {
+      return res.status(400).send({ message: "Invald city ID"});
+     }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Failed to edit city" });
+    }
+  }
   
+  
+  
+// async function edit
+
 module.exports = {
   addMarket,
+  deleteCity,
+  editCity,
   addDistributor,
   getAllMarkets,
   getAllDistributors,

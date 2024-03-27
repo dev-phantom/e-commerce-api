@@ -1,4 +1,5 @@
 const { connect } = require("mongoose");
+//mongoose.set("strictQuery",false);
 
 function connectDB(){
   return connect(process.env.MONGO_DB)
