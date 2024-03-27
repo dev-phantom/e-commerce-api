@@ -73,6 +73,14 @@ app.get("*", (req, res) => {
 
 connectDB()
     .then(() => {
-        server.listen(PORT, () => console.log("Server running on port...", PORT));
+        server.listen(PORT, () => {
+            console.log("Server running on port...", PORT);
+        });
+        
     })
-    .catch(error => console.error(error))
+    .catch(error => {
+        console.error(error);
+        process.exit(1); // Exiting the process due to database connection failure
+    });
+
+
