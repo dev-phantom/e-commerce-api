@@ -153,6 +153,7 @@ module.exports.forgetPassword = async (req, res, next) => {
 
     // check if email does not exits
     const exitMail = await Customer.findOne({ email });
+    console.log(exitMail);
     if(!exitMail) return res.status(404).send({ message: "Email Not Found, Please Verify Your Email And Try Again" });
 
    // send mail
