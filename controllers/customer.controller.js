@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const client = require("../config/redis");
+const Forget = require("../models/Forget");
 
 // @Dec: Create account
 // @Access: Public
@@ -172,9 +173,14 @@ module.exports.forgetPassword = async (req, res, next) => {
       specialChars: false
     });
 
-   await client.connect();
+   // await client.connect();
 
-   await client.set(`${exitMail._id}`, `${otp}`);
+   // await client.set(`${exitMail._id}`, `${otp}`);
+
+   await Forget.create({
+    user_id: exitMail._id,
+    otp,
+   });
 
    const info = await transporter.sendMail({
     from: '"Admin" <farm2home.com.ng>',
@@ -205,10 +211,12 @@ module.exports.verifyCode = async (req,res,next) => {
     const user = await Customer.findOne({ email });
     if(!user) return res.status(404).send({ message: "No account Found with this emaill!" });
 
-   const value = await client.get(`${user._id}`);
+   // const value = await client.get(`${user._id}`);
+    const value = await Forget.findOne({ user_id: user._id});
 
-   if(value === code){
-    await client.del(`${user._id}`)
+   if(value.otp === code){
+    // await client.del(`${user._id}`);
+    await Forget.findOneAndDelete({ user_id: user._id});
     return res.status(200).send(true);
    } else {
     return res.status(400).send({ message: "Invalid code!" });
