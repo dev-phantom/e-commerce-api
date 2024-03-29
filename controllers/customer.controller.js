@@ -218,7 +218,7 @@ module.exports.verifyCode = async (req,res,next) => {
 
    if(value.otp === code){
     // await client.del(`${user._id}`);
-    await Forget.findOneAndDelete({ user_id: user._id});
+    await Forget.deleteMany({ user_id: user._id});
     return res.status(200).send(true);
    } else {
     return res.status(400).send({ message: "Invalid code!" });
