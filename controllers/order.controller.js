@@ -97,7 +97,7 @@ async function getOrdersByOrderId(req, res, next) {
       const ouput = await Market.find({ city: orders[0].address.city });
       //return ouput;
    // });
-    res.status(200).send({ orders,nearest: output });
+   if(output) return res.status(200).send({ orders,nearest: output });
   } catch (error) {
     res
       .status(500)
