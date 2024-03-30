@@ -93,11 +93,11 @@ async function getOrdersByOrderId(req, res, next) {
   try {
     const orders = await Order.find({ orderID }).populate("customer_id");
     //const result = await Market.find({ city: orders.address.city });
-    const result = orders.map(async (order) => {
-      const ouput = await Market.find({ city: order.address.city });
-      return ouput;
-    });
-    res.status(200).send({ orders,nearest: result });
+    //const result = orders.map(async (order) => {
+      const ouput = await Market.find({ city: orders[0].address.city });
+      //return ouput;
+   // });
+    res.status(200).send({ orders,nearest: output });
   } catch (error) {
     res
       .status(500)
