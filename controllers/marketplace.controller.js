@@ -27,7 +27,7 @@ async function addMarket(req, res, next) {
 
 async function getAllMarkets(req, res, next) {
   try {
-    const markets = await Market.find().populate("distributors").select("name");
+    const markets = await Market.find().populate("distributors");
     res.status(200).json({ success: true, data: markets });
   } catch (error) {
     console.error(error);
@@ -39,7 +39,8 @@ async function getAllMarkets(req, res, next) {
 
 
 async function addDistributor(req, res, next) {
-  const { name, address, contact, city, marketId } = req.body; // Assuming marketId is provided in the request body
+  const { name, address, contact, city, marketId } = req.body; 
+  console.log(req.body)
   try {
     const distributor = await Distributor.create({ name, address, contact, city });
     const market = await Market.findById(marketId); // Find the market using marketId
@@ -120,12 +121,34 @@ async function deleteDistributor(req, res, next) {
     }
   }
 
- 
+  async function editMarket(req, res, next) {
+    const { id, ...marketData } = req.body; // Extract market ID and market data from request body
+    try {
+      const updatedMarket = await Market.findByIdAndUpdate(id, marketData, { new: true });
+      if (!updatedMarket) {
+        return res.status(404).json({ success: false, message: "Market not found" });
+      }
+      res.status(200).json({ success: true, data: updatedMarket });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Failed to update market" });
+    }
+  }
+  async function getMarketById(req, res, next) {
+    const { id } = req.params;
+    try {
+      const market = await Market.findById(id);
+      if (!market) {
+        return res.status(404).json({ success: false, message: "Market not found" });
+      }
+      res.status(200).json({ success: true, data: market });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Failed to fetch market" });
+    }
+  }
   
   
-  
-// async function edit
-
 module.exports = {
   addMarket,
   addDistributor,
@@ -133,5 +156,7 @@ module.exports = {
   getAllDistributors,
   deleteDistributor,
   getDistributorsById,
-  deleteMarket
+  deleteMarket,
+  editMarket,
+  getMarketById
 };

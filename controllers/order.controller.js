@@ -5,7 +5,6 @@ const Notification = require("../models/Notification");
 const Customer = require("../models/Customer");
 const Market = require("../models/Market");
 
-
 async function addOrder(req, res, next) {
   const { orderID, products, address, customer_id, amount_paid } = req.body;
   if (!address || !orderID || !customer_id || !products || !amount_paid) {
@@ -20,15 +19,15 @@ async function addOrder(req, res, next) {
       products,
       customer_id,
       amount_paid,
-      markets: []
+      markets: [],
     });
 
     // Get markets based on address or city
-    const markets = await Market.find({ 
+    const markets = await Market.find({
       $or: [
         { address: { $regex: new RegExp(address.address, "i") } }, // Case-insensitive address match
-        { city: { $regex: new RegExp(address.city, "i") } } // Case-insensitive city match
-      ]
+        { city: { $regex: new RegExp(address.city, "i") } }, // Case-insensitive city match
+      ],
     });
     // Update order with market information
     order.markets = markets;
@@ -61,12 +60,12 @@ async function addOrder(req, res, next) {
     await Notification.create({
       orderId: orderID,
       customer_id,
-      full_name:`${user?.first_name} ${user?.last_name}`,
+      full_name: `${user?.first_name} ${user?.last_name}`,
       message: "placed an order!",
     });
     // Delete items from the cart
     await Cart.deleteMany({ customer_id });
-    console.log(order)
+    console.log(order);
     res.status(200).send({ order, markets });
   } catch (error) {
     console.error(error);
@@ -92,13 +91,9 @@ async function getOrdersByOrderId(req, res, next) {
 
   try {
     const orders = await Order.find({ orderID }).populate("customer_id");
-    //const result = await Market.find({ city: orders.address.city });
-    //const result = orders.map(async (order) => {
-      let city = orders[0].address.city;
-      const ouput = await Market.find({ city: city});
-      //return ouput;
-   //});
-   res.status(200).send({ orders,nearest: result });
+    let city = orders[0].address.city;
+    const nearest = await Market.find({ city: city }).populate("distributors");
+    res.status(200).send({ orders, nearest });
   } catch (error) {
     res
       .status(500)
