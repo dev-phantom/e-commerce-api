@@ -70,19 +70,17 @@ async function getAllDistributors(req, res, next) {
       .json({ success: false, message: "Failed to fetch distributors" });
   }
 }
-async function getDistributorsById(req, res, next) {
-  const distributorIds = req.body.ids; // Assuming the array of IDs is sent in the request body with the key "ids"
-
-  if (!distributorIds || !Array.isArray(distributorIds)) {
-    return res.status(400).json({ success: false, message: "Invalid request format. Please provide an array of distributor IDs in the request body with the key 'ids'." });
-  }
-
+async function getDistributorById(req, res, next) {
+  const { id } = req.params;
   try {
-    const distributors = await Distributor.find({ _id: { $in: distributorIds } }); // Find distributors where _id is in the provided array
-    res.status(200).json({ success: true, data: distributors });
+    const distributor = await Distributor.findById(id);
+    if (!distributor) {
+      return res.status(404).json({ success: false, message: "Distributor not found" });
+    }
+    res.status(200).json({ success: true, data: distributor });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: "Error retrieving distributors" });
+    res.status(500).json({ success: false, message: "Failed to fetch distributor" });
   }
 }
 
@@ -147,6 +145,19 @@ async function deleteDistributor(req, res, next) {
       res.status(500).json({ success: false, message: "Failed to fetch market" });
     }
   }
+  async function editDistributor(req, res, next) {
+    const { id, ...distributorData } = req.body; // Extract distributor ID and data from request body
+    try {
+      const updatedDistributor = await Distributor.findByIdAndUpdate(id, distributorData, { new: true });
+      if (!updatedDistributor) {
+        return res.status(404).json({ success: false, message: "Distributor not found" });
+      }
+      res.status(200).json({ success: true, data: updatedDistributor });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Failed to update distributor" });
+    }
+  }
   
   
 module.exports = {
@@ -155,8 +166,9 @@ module.exports = {
   getAllMarkets,
   getAllDistributors,
   deleteDistributor,
-  getDistributorsById,
+  getDistributorById,
   deleteMarket,
   editMarket,
-  getMarketById
+  getMarketById,
+  editDistributor 
 };
