@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { addPriceList,getPriceList } = require("../controllers/pricelist.controller");
+const { addPriceList,getPriceList,deleteCity,editCity } = require("../controllers/pricelist.controller");
 
 const priceListRouter = Router();
 
@@ -8,5 +8,11 @@ priceListRouter.post("/add",addPriceList);
 
 // 2
 priceListRouter.get("/",getPriceList);
+
+//delete city
+priceListRouter.delete("/delete/:id",deleteCity);
+
+//edit city
+priceListRouter.patch("/edit",editCity);
 
 module.exports = priceListRouter;

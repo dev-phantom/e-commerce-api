@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { addMarket, addDistributor,deleteCity,editCity,getAllMarkets, getAllDistributors, deleteDistributor, deleteMarket, getDistributorsById } = require("../controllers/marketplace.controller");
+const { addMarket, addDistributor,getAllMarkets, getAllDistributors, deleteDistributor, deleteMarket, getDistributorsById } = require("../controllers/marketplace.controller");
 
 const MarketplaceRouter = Router();
 
@@ -17,12 +17,6 @@ MarketplaceRouter.post("/get-distributor", getDistributorsById)
 MarketplaceRouter.delete("/delete-distributors",deleteDistributor);
 // to get market
 MarketplaceRouter.delete("/delete-market",deleteMarket);
-
-//delete city
-MarketplaceRouter.delete("/delete/:id",deleteCity);
-
-//edit city
-MarketplaceRouter.patch("/edit",editCity);
 
 
 module.exports = MarketplaceRouter;

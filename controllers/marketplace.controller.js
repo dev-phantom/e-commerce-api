@@ -120,31 +120,7 @@ async function deleteDistributor(req, res, next) {
     }
   }
 
-  async function deleteCity(req, res, next) {
-    try {
-      await Market.findByIdAndDelete(req.params.id);
-      return res.status(200).send({ message: "Deleted!"});
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: "Failed to delete city" });
-    }
-  }
-
-  async function editCity(req, res, next) {
-    const { city,id } = req.body;
-    try {
-     const getCity = await Market.findById(id);
-     if(getCity){
-      getCity.city = city
-      await getCity.save();
-     } else {
-      return res.status(400).send({ message: "Invald city ID"});
-     }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: "Failed to edit city" });
-    }
-  }
+ 
   
   
   
@@ -152,8 +128,6 @@ async function deleteDistributor(req, res, next) {
 
 module.exports = {
   addMarket,
-  deleteCity,
-  editCity,
   addDistributor,
   getAllMarkets,
   getAllDistributors,
