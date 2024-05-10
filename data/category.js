@@ -272,5 +272,10 @@ module.exports.agriculturalCategories = [
       subcategories: [],
       subsubcategories: [],
     },
+    {
+      category: "live stock",
+      subcategories: [],
+      subsubcategories: [],
+    },
   ];
   
