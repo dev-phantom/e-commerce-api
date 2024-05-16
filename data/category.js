@@ -255,11 +255,6 @@ module.exports.agriculturalCategories = [
       subsubcategories: [],
     },
     {
-      category: "live stock",
-      subcategories: [],
-      subsubcategories: [],
-    },
-    {
       category: "Green Manure",
       subcategories: [],
       subsubcategories: [],
